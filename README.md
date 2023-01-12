@@ -7,3 +7,5 @@
 - python -m pip install -r requirements.txt
 - conda install -c conda-forge ffmpeg  # conda
 
+# git commit 시
+#### 반드시 디랙토리 위치가 project root 인지 확인 후 커밋해주세요
