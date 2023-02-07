@@ -1,3 +1,6 @@
+import base64
+import wave
+
 from flask import Flask, request, send_file
 from flask_cors import CORS
 import requests
@@ -8,11 +11,11 @@ CORS(app)
 
 def model_request(text):
     # TODO 모델 가져와서 텍스트를 input으로 output으로 파일이름
-    return "notifications-sound-127856.mp3"
+    return "notifications-sound-127856.wav"
 
 
 def service_request(file_name, jwt):
-    target = open(file_name, "r")
+    target = wave.open(file_name, "rb")
     response = requests.post(url="https://www.ljhhosting.com/api/sound/upload", files=target, headers={'X-ACCESS-TOKEN': jwt})
 
     return response
@@ -25,8 +28,10 @@ def predict_sound():
 
     file_name = model_request(text)
     path = "./temp/"
+
     url = os.path.join(path, file_name)
-    return send_file(url, "multipart/form-data", as_attachment=True)
+
+    return send_file(url, mimetype="multipart/form-data", as_attachment=True)
 
 
 @app.route('/')
