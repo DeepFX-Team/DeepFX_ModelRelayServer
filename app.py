@@ -7,7 +7,7 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 def model_request(text):
@@ -23,6 +23,7 @@ def service_request(file_name, jwt):
 
 
 @app.route("/api/predict/", methods=['POST'])
+@cross
 def predict_sound():
     text = request.json['sentence']
     jwt = request.headers['X-ACCESS-TOKEN']
