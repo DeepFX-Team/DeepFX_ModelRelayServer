@@ -1,7 +1,6 @@
-import base64
 import wave
 
-from flask import Flask, request, send_file
+from flask import Flask, request
 from flask_cors import CORS
 import requests
 import os
@@ -16,14 +15,13 @@ def model_request(text):
 
 
 def service_request(file_name, jwt):
-    target = wave.open(file_name, "rb")
-    response = requests.post(url="https://www.ljhhosting.com/api/sound/upload", files={"soundFile": target.readframes(target.getnframes()-1)}, headers={'X-ACCESS-TOKEN': jwt})
+    target = open(file_name, "rb")
+    response = requests.post(url="https://www.ljhhosting.com/api/sound/upload", files={"soundFile": target}, headers={'X-ACCESS-TOKEN': jwt})
 
     return response
 
 
 @app.route("/api/predict/", methods=['POST'])
-@cross
 def predict_sound():
     text = request.json['sentence']
     jwt = request.headers['X-ACCESS-TOKEN']
