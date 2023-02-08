@@ -9,6 +9,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+
 def model_request(text):
     # TODO 모델 가져와서 텍스트를 input으로 output으로 파일이름
     return "notifications-sound-127856.wav"
@@ -16,7 +17,7 @@ def model_request(text):
 
 def service_request(file_name, jwt):
     target = wave.open(file_name, "rb")
-    response = requests.post(url="https://www.ljhhosting.com/api/sound/upload", files=target, headers={'X-ACCESS-TOKEN': jwt})
+    response = requests.post(url="https://www.ljhhosting.com/api/sound/upload", files={"soundFile": target.readframes(target.getnframes()-1)}, headers={'X-ACCESS-TOKEN': jwt})
 
     return response
 
@@ -31,7 +32,9 @@ def predict_sound():
 
     url = os.path.join(path, file_name)
 
-    return send_file(url, mimetype="multipart/form-data", as_attachment=True)
+    response = service_request(url, jwt)
+
+    return response.json()
 
 
 @app.route('/')
